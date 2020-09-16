@@ -1,0 +1,116 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://assets/sprites/background_day.png" type="Texture" id=1]
+[ext_resource path="res://scenes/ground.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/game.gd" type="Script" id=4]
+[ext_resource path="res://scripts/pos.gd" type="Script" id=5]
+[ext_resource path="res://assets/sprites/button_menu.png" type="Texture" id=6]
+[ext_resource path="res://assets/sprites/label_game_over.png" type="Texture" id=7]
+[ext_resource path="res://assets/fonts/Symtext.ttf" type="DynamicFontData" id=8]
+
+[sub_resource type="DynamicFont" id=1]
+size = 31
+font_data = ExtResource( 8 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "lose"
+length = 0.5
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("Label:custom_fonts/font:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 31, 47 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Label:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -12, 0 ), Vector2( -12, 84 ) ]
+}
+
+[node name="mundinho" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="label_game_over" type="Sprite" parent="."]
+position = Vector2( 72, 72 )
+z_index = 2
+texture = ExtResource( 7 )
+
+[node name="bg" type="Sprite" parent="."]
+z_index = -3
+texture = ExtResource( 1 )
+centered = false
+
+[node name="ground" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, 204 )
+
+[node name="player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 36, 96 )
+mode = 2
+
+[node name="Canos" type="Node" parent="."]
+
+[node name="pos" type="Position2D" parent="Canos"]
+position = Vector2( 204, 0 )
+script = ExtResource( 5 )
+
+[node name="Timer" type="Timer" parent="Canos"]
+wait_time = 1.5
+autostart = true
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 50.3163, 169.643 )
+z_index = 2
+texture = ExtResource( 6 )
+centered = false
+
+[node name="Button" type="Button" parent="."]
+pause_mode = 2
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 50.3163
+margin_top = 166.643
+margin_right = 90.3163
+margin_bottom = 186.643
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="."]
+margin_left = 48.0
+margin_right = 88.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control"]
+margin_left = -12.0
+margin_right = 72.0
+margin_bottom = 70.0
+custom_fonts/font = SubResource( 1 )
+text = "0"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Control"]
+pause_mode = 2
+anims/lose = SubResource( 2 )
+[connection signal="timeout" from="Canos/Timer" to="Canos/pos" method="_on_Timer_timeout"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

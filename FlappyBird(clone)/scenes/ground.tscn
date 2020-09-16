@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/sprites/ground.png" type="Texture" id=1]
+[ext_resource path="res://scenes/ground.gd" type="Script" id=2]
+[ext_resource path="res://assets/sfx/sfx_die.ogg" type="AudioStream" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "move"
+length = 2.0
+loop = true
+step = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("spr-right:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 168, 0 ), Vector2( -24, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("spr_left:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -192, 0 ) ]
+}
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 60, 10 )
+
+[node name="ground" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="spr-right" type="Sprite" parent="."]
+position = Vector2( 168, 0 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="spr_left" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "move"
+anims/move = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+z_index = -2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 72, 12 )
+shape = SubResource( 2 )
+
+[node name="die" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

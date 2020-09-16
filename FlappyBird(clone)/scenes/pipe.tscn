@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scripts/pipe.gd" type="Script" id=1]
+[ext_resource path="res://assets/sprites/pipe_green_top.png" type="Texture" id=2]
+[ext_resource path="res://assets/sfx/sfx_point.ogg" type="AudioStream" id=3]
+[ext_resource path="res://assets/sfx/sfx_hit.ogg" type="AudioStream" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 11.3689, 120 )
+
+[sub_resource type="SegmentShape2D" id=2]
+a = Vector2( 0, -30 )
+b = Vector2( 0, 30 )
+
+[node name="pipe" type="Node2D"]
+z_index = -1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="top" type="Area2D" parent="."]
+position = Vector2( 0, -108 )
+
+[node name="pipe_top" type="Sprite" parent="top"]
+position = Vector2( 0, -40.5866 )
+scale = Vector2( 1, 1.50733 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="top"]
+position = Vector2( -0.396851, -40.4126 )
+shape = SubResource( 1 )
+
+[node name="bottom" type="Area2D" parent="."]
+position = Vector2( 0, 108 )
+
+[node name="pipe_bottom" type="Sprite" parent="bottom"]
+position = Vector2( 0, 46 )
+scale = Vector2( 1, 1.575 )
+texture = ExtResource( 2 )
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="bottom"]
+position = Vector2( 0, 42 )
+shape = SubResource( 1 )
+
+[node name="pontinho" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="pontinho"]
+position = Vector2( 20, 0 )
+shape = SubResource( 2 )
+
+[node name="point" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+
+[node name="hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+[connection signal="body_entered" from="top" to="." method="_on_top_body_entered"]
+[connection signal="body_entered" from="bottom" to="." method="_on_bottom_body_entered"]
+[connection signal="body_entered" from="pontinho" to="." method="_on_pontinho_body_entered"]
